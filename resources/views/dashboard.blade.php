@@ -30,6 +30,7 @@
           </div>
         </div>
         <div class="row">
+
             @php
                 $json = json_decode($data);
                 
@@ -37,12 +38,7 @@
 
                 foreach($json as $day) {
                     
-                    if (substr($day->dayName, 0, 1) == "S") {
-                        $colorClass = ' colored';
-                    } else {
-                        $colorClass = '';
-                    }
-
+                    substr($day->dayName, 0, 1) == "S" ? $colorClass = ' colored' : $colorClass = '';
                     echo '<div class="col-4 col-lg-2 blox' .$colorClass. '">';
                     
                     if ($count == 1) {
@@ -52,8 +48,6 @@
                     }
                     echo '<h2>' .$day->dayName. '</h2>';
 
-                    //echo '<p>' .$day['weekday']. '</p>';
-
                     echo '<img src="https://www.metaweather.com/static/img/weather/' .$day->imageName. '.svg" title="' .$day->weatherCond. '"><br>';
                     echo '<p><b>' .$day->tempHigh. 'º</b> / ' .$day->tempLow. 'º</p>';
                     echo '</div>';
@@ -62,6 +56,7 @@
                 }
 
             @endphp
+
         </div>
     </div>
 

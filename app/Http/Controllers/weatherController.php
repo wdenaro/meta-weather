@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
-use DateTimeZone;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use App\CustomClass\helpers;
 
 class weatherController extends Controller
 {
 
 
-    public function main()
+    public function index()
     {
         // GET the most recent update from DB
         $db = DB::table('meta_weather')
@@ -22,12 +23,14 @@ class weatherController extends Controller
         // IF there is data, analyze it's age
         if (isset($db[0]->data)) {
 
-            $now = new DateTime('now', new DateTimeZone('Zulu'));
-            $last = new DateTime($db[0]->updated_at);
-            $minutesSinceLastUpdate = $now->diff($last)->format('%I');
+            $now = Carbon::now();
+            $last = new Carbon($db[0]->updated_at);
+            $secondsSinceLastUpdate = $now->diffInSeconds($last);
 
-            // IF the data is current, use it
-            if ($minutesSinceLastUpdate < 10) {
+            helpers::write_log('weather: $secondsSinceLastUpdate', $secondsSinceLastUpdate);
+    
+            // IF the data is current (newer than 10 minutes), use it
+            if ($secondsSinceLastUpdate < 600) {
 
                 $data = $db[0]->data;
 
@@ -68,6 +71,8 @@ class weatherController extends Controller
         $err = curl_error($curl);
         curl_close($curl);
 
+        helpers::write_log('weather: full response', $response);
+
         $json = json_decode($response);
 
         // Create a new ARRAY to hold the pertinent data
@@ -80,8 +85,8 @@ class weatherController extends Controller
             $dayName = date('l', $timestamp);
 
             // Convert from C to F
-            $tempHigh = round(($day->max_temp * 1.8) + 32);
-            $tempLow = round(($day->min_temp * 1.8) + 32);
+            $tempHigh = helpers::convert_to_F($day->max_temp);
+            $tempLow = helpers::convert_to_F($day->min_temp);
 
             $imageName = $day->weather_state_abbr;
             $weatherCond = $day->weather_state_name;
@@ -100,7 +105,6 @@ class weatherController extends Controller
 
         return $forecast;
     }
-
 
 
 }

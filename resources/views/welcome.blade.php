@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="<?php echo route('dash.main'); ?>">Go to Dashboard</a>
+                    <a href="<?php echo route('dash.index'); ?>">Go to Dashboard</a>
                 </div>
             </div>
         </div>

@@ -15,5 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', 'weatherController@main')
-    ->name('dash.main');
+Route::get('/dashboard', 'weatherController@index')
+    ->name('dash.index');
