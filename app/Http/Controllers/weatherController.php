@@ -8,42 +8,41 @@ use Illuminate\Support\Facades\DB;
 
 use App\CustomClass\Common;
 
-class weatherController extends Controller
-{
+class weatherController extends Controller {
 
 
-    public function index()
-    {
+    public function index() {
+
         // GET the most recent update from DB
         $db = DB::table('meta_weather')
                     ->orderBy('updated_at', 'DESC')
                     ->limit(1)
                     ->get();
         
-        // IF there is data, analyze it's age
+        // IF there is data, analyze its age
         if (isset($db[0]->data)) {
 
             $now = Carbon::now();
             $last = new Carbon($db[0]->updated_at);
-            $secondsSinceLastUpdate = $now->diffInSeconds($last);
+            $seconds_since_last_update = $now->diffInSeconds($last);
 
-            Common::write_log('weather: $secondsSinceLastUpdate', $secondsSinceLastUpdate);
+            Common::write_log('weather: $seconds_since_last_update', $seconds_since_last_update);
     
             // IF the data is current (newer than 10 minutes), use it
-            if ($secondsSinceLastUpdate < 600) {
+            if ($seconds_since_last_update < 600) {
 
                 $data = $db[0]->data;
 
             } else {
 
                 // IF the data is old, GET fresh data
-                $data = $this->callAPI();
+                $data = $this->call_api();
             }
 
         // GET fresh data
         } else {
 
-            $data = $this->callAPI();
+            $data = $this->call_api();
 
         }
 
@@ -52,8 +51,9 @@ class weatherController extends Controller
     }
 
 
-    private function callAPI()
-    {
+
+    private function call_api() {
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -82,16 +82,16 @@ class weatherController extends Controller
 
             // Convetrt to get name of day
             $timestamp = strtotime($day->applicable_date);
-            $dayName = date('l', $timestamp);
+            $day_name = date('l', $timestamp);
 
             // Convert from C to F
-            $tempHigh = Common::convert_to_F($day->max_temp);
-            $tempLow = Common::convert_to_F($day->min_temp);
+            $temp_high = Common::convert_to_f($day->max_temp);
+            $temp_low = Common::convert_to_f($day->min_temp);
 
-            $imageName = $day->weather_state_abbr;
-            $weatherCond = $day->weather_state_name;
+            $image_name = $day->weather_state_abbr;
+            $weather_cond = $day->weather_state_name;
 
-            $arr = array("dayName"=>$dayName, "tempHigh"=>$tempHigh, "tempLow"=>$tempLow, "imageName"=>$imageName, "weatherCond"=>$weatherCond);
+            $arr = array("dayName"=>$day_name, "tempHigh"=>$temp_high, "tempLow"=>$temp_low, "imageName"=>$image_name, "weatherCond"=>$weather_cond);
 
             array_push($data, $arr);
 
@@ -104,6 +104,7 @@ class weatherController extends Controller
         );
 
         return $forecast;
+
     }
 
 

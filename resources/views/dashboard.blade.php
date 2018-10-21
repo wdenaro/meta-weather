@@ -11,10 +11,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
 	<!--[if lt IE 9]>
-	<script src="/js/_lib/html5shiv.js"></script>
+	<script src="{{ asset('js/_lib/html5shiv.js') }}"></script>
 	<![endif]-->
 
 </head>
@@ -38,8 +38,8 @@
 
                 foreach($json as $day) {
                     
-                    substr($day->dayName, 0, 1) == "S" ? $colorClass = ' colored' : $colorClass = '';
-                    echo '<div class="col-4 col-lg-2 blox' .$colorClass. '">';
+                    substr($day->dayName, 0, 1) == "S" ? $color_class = ' colored' : $color_class = '';
+                    echo '<div class="col-4 col-lg-2 blox' .$color_class. '">';
                     
                     if ($count == 1) {
                         $day->dayName = 'Today';
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-<script src="js/local.js"></script>
+<script src="{{  asset('js/local.js') }}"></script>
 
 <!-- WEYLAND-YUTANI CORPORATION - "Building Better Worlds." -->
 
