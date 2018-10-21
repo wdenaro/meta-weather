@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\CustomClass\helpers;
+use App\CustomClass\Common;
 
 class weatherController extends Controller
 {
@@ -27,7 +27,7 @@ class weatherController extends Controller
             $last = new Carbon($db[0]->updated_at);
             $secondsSinceLastUpdate = $now->diffInSeconds($last);
 
-            helpers::write_log('weather: $secondsSinceLastUpdate', $secondsSinceLastUpdate);
+            Common::write_log('weather: $secondsSinceLastUpdate', $secondsSinceLastUpdate);
     
             // IF the data is current (newer than 10 minutes), use it
             if ($secondsSinceLastUpdate < 600) {
@@ -71,7 +71,7 @@ class weatherController extends Controller
         $err = curl_error($curl);
         curl_close($curl);
 
-        helpers::write_log('weather: full response', $response);
+        Common::write_log('weather: full response', $response);
 
         $json = json_decode($response);
 
@@ -85,8 +85,8 @@ class weatherController extends Controller
             $dayName = date('l', $timestamp);
 
             // Convert from C to F
-            $tempHigh = helpers::convert_to_F($day->max_temp);
-            $tempLow = helpers::convert_to_F($day->min_temp);
+            $tempHigh = Common::convert_to_F($day->max_temp);
+            $tempLow = Common::convert_to_F($day->min_temp);
 
             $imageName = $day->weather_state_abbr;
             $weatherCond = $day->weather_state_name;
