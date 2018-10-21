@@ -4,7 +4,7 @@ namespace App\CustomClass;
 
 use Illuminate\Support\Facades\DB;
 
-class common {
+class Common {
 
 
     public static function write_log($notes, $entry) {
