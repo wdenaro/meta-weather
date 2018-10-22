@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\CustomClass\Common;
+use App\Common;
 
 class weatherController extends Controller {
 

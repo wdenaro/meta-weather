@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CustomClass;
+namespace App;
 
 use Illuminate\Support\Facades\DB;
 
